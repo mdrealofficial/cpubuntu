@@ -423,7 +423,14 @@ class Update_system extends Home
 		  				$ex_sql = $single_cmd . $semicolon;
 
 		  				if(strlen($ex_sql) > 1) :
-		  					$this->db->query($ex_sql);
+		  					try{
+		  						$this->db->query($ex_sql);
+		  					}
+
+		  					catch(Exception $e){
+		  						$error= $e->getMessage();
+		  					}
+
 		  				endif;
 		  		endforeach;
 		  	endif;
@@ -434,67 +441,6 @@ class Update_system extends Home
 		  	// $this->db->update('version', array('current' => '0'));
 		  	// $this->db->insert('version', array('version' => $version, 'current' => '1', 'date' => date('Y-m-d H:i:s')));
 
-		  	// writing application/config/my_config
-		 //  	$app_my_config_data = "<?php ";
-		 //  	$app_my_config_data.= "\n\$config['default_page_url'] = '".$this->config->item('default_page_url')."';\n";
-		 //  	$app_my_config_data.= "\$config['product_name'] = '".$this->config->item('product_name')."';\n";
-		 //  	$app_my_config_data.= "\$config['product_short_name'] = '".$this->config->item('product_short_name')."' ;\n";
-		 //  	$app_my_config_data.= "\$config['product_version'] = '".$version."';\n\n";
-		 //  	$app_my_config_data.= "\$config['institute_address1'] = '".$this->config->item('institute_address1')."' ;\n";
-		 //  	$app_my_config_data.= "\$config['institute_address2'] = '".$this->config->item('institute_address2')."' ;\n";
-		 //  	$app_my_config_data.= "\$config['institute_email'] = '".$this->config->item('institute_email')."' ;\n";
-		 //  	$app_my_config_data.= "\$config['institute_mobile'] = '".$this->config->item('institute_mobile')."' ;\n";
-		 //  	$app_my_config_data.= "\$config['developed_by'] = '".$this->config->item('developed_by')."';\n";
-		 //  	$app_my_config_data.= "\$config['developed_by_href'] = '".$this->config->item('developed_by_href')."';\n";
-		 //  	$app_my_config_data.= "\$config['developed_by_title'] = '".$this->config->item('developed_by_title')."';\n";
-		 //  	$app_my_config_data.= "\$config['developed_by_prefix'] = '".$this->config->item('developed_by_prefix')."' ;\n";
-		 //  	$app_my_config_data.= "\$config['support_email'] = '".$this->config->item('support_email')."' ;\n";
-		 //  	$app_my_config_data.= "\$config['support_mobile'] = '".$this->config->item('support_mobile')."' ;\n";
-		 //  	$app_my_config_data.= "\$config['time_zone'] = '".$this->config->item('time_zone')."' ;\n";
-		 //  	$app_my_config_data.= "\$config['language'] = '".$this->config->item('language')."' ;\n";
-		 //  	$app_my_config_data.= "\$config['sess_use_database'] = FALSE;\n";
-		 //  	$app_my_config_data.= "\$config['sess_table_name'] = 'ci_sessions';\n";
-		  	
-		 //  	if($this->config->item('number_of_message_to_be_sent_in_try')!="")
-		 //  	$app_my_config_data.= "\$config['number_of_message_to_be_sent_in_try'] = '".$this->config->item('number_of_message_to_be_sent_in_try')."' ;\n";
-		  	
-		 //  	if($this->config->item('update_report_after_time')!="")
-		 //  	$app_my_config_data.= "\$config['update_report_after_time'] = '".$this->config->item('update_report_after_time')."' ;\n";
-		  	
-		 //  	if($this->config->item('theme')!="")
-		 //  	$app_my_config_data.= "\$config['theme'] = '".$this->config->item('theme')."' ;\n";
-		  	
-		 //  	if($this->config->item('display_landing_page')!="")
-		 //  	$app_my_config_data.= "\$config['display_landing_page'] = '".$this->config->item('display_landing_page')."' ;\n";
-
-		 //  	if($this->config->item('auto_reply_delay_time')!="")
-			//   	$app_my_config_data.= "\$config['auto_reply_delay_time'] = ".$this->config->item('auto_reply_delay_time').";\n"; 
-			// else 
-			//   	$app_my_config_data.= "\$config['auto_reply_delay_time'] = 10;\n"; 
-
-		 //  	if($this->config->item('auto_reply_campaign_live_duration')!="")   
-		 //        $app_my_config_data.= "\$config['auto_reply_campaign_live_duration'] = ".$this->config->item('auto_reply_campaign_live_duration').";\n";
-		 //    else
-		 //        $app_my_config_data.= "\$config['auto_reply_campaign_live_duration'] = 100;\n";
-
-		 //    if($this->config->item('master_password')!="")   
-		 //        $app_my_config_data.= "\$config['master_password'] = '".$this->config->item('master_password')."';\n";
-		 //    else $app_my_config_data.= "\$config['master_password'] = '';\n"; 
-
-		 //    if($this->config->item('email_sending_option')!="")   
-		 //        $app_my_config_data.= "\$config['email_sending_option'] = '".$this->config->item('email_sending_option')."';\n";
-		 //    else $app_my_config_data.= "\$config['email_sending_option'] = 'Default';\n"; 
-
-		 //    if($this->config->item('auto_reply_campaign_per_cron_job')!="")   
-		 //        $app_my_config_data.= "\$config['auto_reply_campaign_per_cron_job'] = '".$this->config->item('auto_reply_campaign_per_cron_job')."';\n";
-		 //    else $app_my_config_data.= "\$config['auto_reply_campaign_per_cron_job'] = 50;\n"; 
-
-		 //    if($this->config->item('autoreply_renew_access')!="")   
-		 //        $app_my_config_data.= "\$config['autoreply_renew_access'] = '".$this->config->item('autoreply_renew_access')."';\n";
-		 //    else $app_my_config_data.= "\$config['autoreply_renew_access'] = '0';\n"; 
-
-		  	
-		 //  	file_put_contents(APPPATH.'config/my_config.php', $app_my_config_data, LOCK_EX);
 
 		  	$response=array('status'=>'1','message'=>$this->lang->line('app has been updated successfully.'));
 	  		
@@ -638,7 +584,12 @@ class Update_system extends Home
 		  				$ex_sql = $single_cmd . $semicolon;
 
 		  				if(strlen($ex_sql) > 1) :
-		  					$this->db->query($ex_sql);
+		  					try{
+		  						$this->db->query($ex_sql);
+		  					}
+		  					catch(Exception $e){
+		  						$error= $e->getMessage();
+		  					}
 		  				endif;
 		  		endforeach;
 		  	endif;

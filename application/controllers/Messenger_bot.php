@@ -1047,7 +1047,7 @@ class Messenger_bot extends Home
 
                 $description=$msg['message']['text'];
                 $human=$answer;
-                $response_from_api=$this->get_ai_reply_open_ai($description,$human);
+                $response_from_api=$this->get_ai_reply_open_ai($description,$human,$value['user_id']);
                 $msg['message']['text']= $response_from_api['choices'][0]['text'] ?? "";
                 unset($msg['message']['text_from']);
             }
@@ -1695,7 +1695,7 @@ class Messenger_bot extends Home
         elseif((isset($response['entry'][0]['messaging'][0]['postback']['referral']['type']) && $response['entry'][0]['messaging'][0]['postback']['referral']['type']=="OPEN_THREAD" && isset($response['entry'][0]['messaging'][0]['postback']['referral']['ref'])) || 
         
         (isset($response['entry'][0]['messaging'][0]['postback']['payload']) && $response['entry'][0]['messaging'][0]['postback']['payload']=="GET_STARTED_PAYLOAD" ) ||
-        (isset($response['entry'][0]['messaging'][0]['referral']['source']) && $response['entry'][0]['messaging'][0]['referral']['type']=="OPEN_THREAD"))
+        (isset($response['entry'][0]['messaging'][0]['referral']['source'])))
         
             //When not any conversation and get started button is added
             {   

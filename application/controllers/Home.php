@@ -2172,10 +2172,7 @@ class Home extends CI_Controller
         $str .='<option value="">'.$this->lang->line("Facebook Page").'</option>';
 
         if(addon_exist($module_id=320,$addon_unique_name="instagram_bot") || $return_groups)
-        {
-            $str .='<optgroup label="'.$this->lang->line("Facebook Page").'">';
-            $str .='<option value="all_pages">'.$this->lang->line("ALL Pages").'</option>';
-        }
+        $str .='<optgroup label="'.$this->lang->line("Facebook Page").'">';
 
         foreach ($page_info as $key => $value)
         {
@@ -2198,9 +2195,7 @@ class Home extends CI_Controller
 
         if(addon_exist($module_id=320,$addon_unique_name="instagram_bot"))
         {
-            $str .='<optgroup label="'.$this->lang->line("Instagram").'">';
-            $str .= '<option value="all_accounts-ig">'.$this->lang->line("ALL Accounts").'</option>';
-
+            $str .='<optgroup label="'.$this->lang->line("Instagram").'">';        
             foreach ($page_info as $key => $value)
             {
                 $selected = ($this->session->userdata('selected_global_page_table_id')==$value['id'] && $this->session->userdata('selected_global_media_type')=='ig') ? 'selected' : '';
@@ -2224,9 +2219,7 @@ class Home extends CI_Controller
             
             $group_info = $this->basic->get_data("facebook_rx_fb_group_info",array("where"=>array("user_id"=>$this->user_id,"facebook_rx_fb_user_info_id"=>$this->session->userdata("facebook_rx_fb_user_info"))),'id,group_name');        
 
-            $str .='<optgroup label="'.$this->lang->line("Facebook Group").'">';
-            $str .= '<option value="all_groups-gr">'.$this->lang->line("ALL Groups").'</option>';
-
+            $str .='<optgroup label="'.$this->lang->line("Facebook Group").'">';        
             foreach ($group_info as $key => $value)
             {
                 $str .= '<option value="'.$value['id'].'-gr">'.$value['group_name'].'</option>';                
@@ -2551,7 +2544,9 @@ class Home extends CI_Controller
             $postback_ids_array = explode(',', $campaign_data[0]['otn_postback_id']);
             $label_ids_array = explode(',', $campaign_data[0]['label_ids']);
             $exclude_label_array = explode(',', $campaign_data[0]['excluded_label_ids']);
+
         }
+
 
         if(!isset($label_ids) || !is_array($label_ids)) $label_ids =array();
         if(!isset($excluded_label_ids) || !is_array($excluded_label_ids)) $excluded_label_ids =array();
@@ -2613,8 +2608,8 @@ class Home extends CI_Controller
 
         $subscriber_count = 0;
 
-        if($is_bot_subscriber=='1') $where_simple2 =array("messenger_bot_subscriber.page_table_id"=>$page_id,'is_bot_subscriber'=> '1','unavailable'=>'0','messenger_bot_subscriber.user_id'=>$this->user_id,'permission'=>'1','notification_type !='=>'otn');
-        else $where_simple2 =array("messenger_bot_subscriber.page_table_id"=>$page_id,'client_thread_id !='=> '','messenger_bot_subscriber.user_id'=>$this->user_id,'permission'=>'1','notification_type !='=>'otn');
+        if($is_bot_subscriber=='1') $where_simple2 =array("messenger_bot_subscriber.page_table_id"=>$page_id,'is_bot_subscriber'=> '1','unavailable'=>'0','user_id'=>$this->user_id,'permission'=>'1');
+        else $where_simple2 =array("messenger_bot_subscriber.page_table_id"=>$page_id,'client_thread_id !='=> '','user_id'=>$this->user_id,'permission'=>'1');
 
         if(isset($user_gender) && $user_gender!="")  $where_simple2['messenger_bot_subscriber.gender'] = $user_gender;
         if(isset($user_time_zone) && $user_time_zone!="")  $where_simple2['messenger_bot_subscriber.timezone'] = $user_time_zone;
@@ -2644,7 +2639,7 @@ class Home extends CI_Controller
 
         // $where_simple2['otn_optin_subscriber.is_sent'] = '0';
         $where2 = array('where'=>$where_simple2);
-        $join = ['otn_postback'=>'otn_optin_subscriber.otn_id=otn_postback.id,left','messenger_bot_subscriber'=>'otn_optin_subscriber.subscriber_id=messenger_bot_subscriber.subscribe_id,left','messenger_bot_subscribers_label'=>'messenger_bot_subscribers_label.subscriber_table_id=messenger_bot_subscriber.id,left'];
+        $join = ['messenger_bot_subscriber'=>'otn_optin_subscriber.subscriber_id=messenger_bot_subscriber.subscribe_id,left','messenger_bot_subscribers_label'=>'messenger_bot_subscribers_label.subscriber_table_id=messenger_bot_subscriber.id,left'];
         $bot_subscriber=$this->basic->get_data("otn_optin_subscriber",$where2,'count(DISTINCT(messenger_bot_subscriber.subscribe_id)) as subscriber_count',$join);
         // echo $this->db->last_query();
         $subscriber_count = isset($bot_subscriber[0]['subscriber_count'])? $bot_subscriber[0]['subscriber_count'] : 0;
@@ -2659,7 +2654,7 @@ class Home extends CI_Controller
             {
                 $push_postback.="<option value='".$value['postback_id']."'>".$value['template_name'].' ['.$value['postback_id'].']'."</option>";
             }
-            $total_bot_subscriber=$this->basic->get_data("otn_optin_subscriber",array("where"=>array("messenger_bot_subscriber.page_table_id"=>$page_id,'is_bot_subscriber'=> '1','messenger_bot_subscriber.user_id'=>$this->user_id,'permission'=>'1','notification_type !='=>'otn')),'count(messenger_bot_subscriber.id) as total_subscriber_count',$join);
+            $total_bot_subscriber=$this->basic->get_data("otn_optin_subscriber",array("where"=>array("messenger_bot_subscriber.page_table_id"=>$page_id,'is_bot_subscriber'=> '1','user_id'=>$this->user_id,'permission'=>'1')),'count(messenger_bot_subscriber.id) as total_subscriber_count',$join);
             $total_subscriber_count = isset($total_bot_subscriber[0]['total_subscriber_count'])? $total_bot_subscriber[0]['total_subscriber_count'] : 0;
         }
         $page_info['total_subscriber_count'] = $total_subscriber_count;
@@ -3900,9 +3895,8 @@ class Home extends CI_Controller
         {
             redirect("home/credential_check", 'Location');
         }
+
     }
-
-
     public function credential_check($secret_code=0)
     {
         if($this->is_demo=='1') redirect('home/access_forbidden','refresh');
@@ -3943,7 +3937,7 @@ class Home extends CI_Controller
 
     public function code_activation_check_action($purchase_code,$only_domain,$periodic=0)
     {
-        $url = "https://xeroneit.net/development/envato_license_activation/purchase_code_check.php?purchase_code={$purchase_code}&domain={$only_domain}&item_name=XeroChat";
+        $url = "http://xeroneit.net/development/envato_license_activation/purchase_code_check.php?purchase_code={$purchase_code}&domain={$only_domain}&item_name=XeroChat";
 
         $credentials = $this->get_general_content_with_checking($url);
         $decoded_credentials = json_decode($credentials,true);
@@ -4042,7 +4036,7 @@ class Home extends CI_Controller
 
         $purchase_code = $file_data_array['purchase_code'];
 
-        $url = "https://xeroneit.net/development/envato_license_activation/regular_or_extended_check_r.php?purchase_code={$purchase_code}";
+        $url = "http://xeroneit.net/development/envato_license_activation/regular_or_extended_check_r.php?purchase_code={$purchase_code}";
 
         $credentials = $this->get_general_content_with_checking($url);
         $response = json_decode($credentials, true);
@@ -4775,14 +4769,10 @@ class Home extends CI_Controller
 
             // 2nd level relpy is turned off
             $post_id = isset($response['entry'][0]['changes'][0]['value']['parent_id']) ? $response['entry'][0]['changes'][0]['value']['parent_id']:"";
-
             $parent_id_page_id_array=explode("_", $post_id);
             $parent_id_page_id=isset($parent_id_page_id_array[0]) ? $parent_id_page_id_array[0] :"";
-            $comment_id = isset($response['entry'][0]['changes'][0]['value']['comment_id']) ? $response['entry'][0]['changes'][0]['value']['comment_id']:"";
 
-            $comment_id_array=explode("_", $comment_id);
-
-            if($page_id!=$parent_id_page_id && $comment_id_array[0]==$parent_id_page_id_array[0]){ // From 2nd reply Comment. 
+            if($page_id!=$parent_id_page_id){ // From 2nd reply Comment. 
                 exit; 
             }
 
@@ -5404,13 +5394,6 @@ class Home extends CI_Controller
     {
         if($this->session->userdata('user_type') == 'Admin' && $this->basic->is_exist("add_ons",array("project_id"=>66))) return true;
         if($this->session->userdata('user_type') == 'Member' && in_array(335,$this->module_access)) return true;
-        return false;
-    }
-
-    protected function ai_reply_exist()
-    {
-        if($this->session->userdata('user_type') == 'Admin' && $this->basic->is_exist("add_ons",array("project_id"=>67))) return true;
-        if($this->session->userdata('user_type') == 'Member' && in_array(340,$this->module_access)) return true;
         return false;
     }
 
@@ -7419,18 +7402,6 @@ class Home extends CI_Controller
       $this->session->set_userdata('selected_global_page_table_id',$page_id);
       if($return_social_media_by_force) $this->session->set_userdata('selected_global_media_type',$social_media);
       echo "1";
-    }
-
-
-    public function get_ai_reply_open_ai($description,$human="Human: How are you ?"){
-
-            $api_info=$this->basic->get_data("open_ai_config",$where='',$select='',$join='',$limit='1',$start=0,$order_by='RAND()');
-            $promt=$api_info[0]['instruction_to_ai'].".".$description."Human : ".$human."."."AI:";
-            $api_key=$api_info[0]['open_ai_secret_key'];
-            $this->load->library('Openai_api');
-            $response= $this->openai_api->open_ai_completion($api_key,$promt);
-            $response=json_decode($response,true);
-            return $response;
     }
 
 }

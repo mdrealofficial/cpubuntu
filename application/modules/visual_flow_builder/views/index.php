@@ -8,12 +8,12 @@
         <title><?php echo $page_title; ?></title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.1/css/all.min.css">
 
-        <link href="<?php echo base_url(); ?>plugins/flow_builder/css/app.eee7e866.css" rel="preload" as="style">
+        <link href="<?php echo base_url(); ?>plugins/flow_builder/css/app.81600129.css" rel="preload" as="style">
         <link href="<?php echo base_url(); ?>plugins/flow_builder/css/chunk-vendors.bff25d1a.css" rel="preload" as="style">
-        <link href="<?php echo base_url(); ?>plugins/flow_builder/js/app.52b7f623.js" rel="preload" as="script">
+        <link href="<?php echo base_url(); ?>plugins/flow_builder/js/app.1abeb5f9.js" rel="preload" as="script">
         <link href="<?php echo base_url(); ?>plugins/flow_builder/js/chunk-vendors.fb8bdf9e.js" rel="preload" as="script">
         <link href="<?php echo base_url(); ?>plugins/flow_builder/css/chunk-vendors.bff25d1a.css" rel="stylesheet">
-        <link href="<?php echo base_url(); ?>plugins/flow_builder/css/app.eee7e866.css" rel="stylesheet">
+        <link href="<?php echo base_url(); ?>plugins/flow_builder/css/app.81600129.css" rel="stylesheet">
 
   </head>
 
@@ -77,7 +77,7 @@
         <script src="<?php echo base_url('visual_flow_builder/language_file'); ?>" type="text/javascript"></script>
 
         <script src="<?php echo base_url(); ?>plugins/flow_builder/js/chunk-vendors.fb8bdf9e.js"></script>
-        <script src="<?php echo base_url(); ?>plugins/flow_builder/js/app.52b7f623.js"></script>
+        <script src="<?php echo base_url(); ?>plugins/flow_builder/js/app.1abeb5f9.js"></script>
 
     </body>
 </html>

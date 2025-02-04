@@ -143,9 +143,9 @@ class Fb_rx_login
 		$helper = $this->fb->getRedirectLoginHelper();
 
 		if($this->CI->config->item('facebook_poster_group_enable_disable') == '1' && $this->CI->is_group_posting_exist)
-			$permissions = ['email','pages_manage_posts','pages_manage_engagement','pages_manage_metadata','pages_read_engagement','pages_show_list','pages_messaging','public_profile','publish_to_groups','read_insights'];
+			$permissions = ['email','pages_manage_posts','pages_manage_engagement','pages_manage_metadata','pages_read_engagement','pages_show_list','pages_messaging','public_profile','publish_to_groups','read_insights','business_management'];
 		else
-			$permissions = ['email','pages_manage_posts','pages_manage_engagement','pages_manage_metadata','pages_read_engagement','pages_show_list','pages_messaging','public_profile','read_insights'];
+			$permissions = ['email','pages_manage_posts','pages_manage_engagement','pages_manage_metadata','pages_read_engagement','pages_show_list','pages_messaging','public_profile','read_insights','business_management'];
 
 		// if($this->CI->basic->is_exist("add_ons",array("project_id"=>41)))
 			// array_push($permissions, 'publish_video');

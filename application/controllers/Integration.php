@@ -330,54 +330,68 @@ class Integration extends Home
 	}
 
 	public function open_ai_api_credentials(){
-		if($this->session->userdata('user_type') != 'Admin') redirect('home/login_page', 'location');
-        $data['body'] = "admin/openAI/api_credentials";
-        $data['page_title'] = $this->lang->line('Open AI API Credentials');
-        $get_data = $this->basic->get_data("open_ai_config");
-        $data['xvalue'] = isset($get_data[0])?$get_data[0]:array();
-        if($this->is_demo == '1')
-            $data["xvalue"]["open_ai_secret_key"] = "XXXXXXXXXX";
-        $this->_viewcontroller($data);
+		if(ai_reply_exist()){
+			$data['body'] = "admin/openAI/api_credentials";
+			$data['page_title'] = $this->lang->line('Open AI API Credentials');
+			$user_id=$this->session->userdata('user_id');
+			$get_data = $this->basic->get_data("open_ai_config",array("where"=>array('user_id'=>$user_id)));
+			$data['xvalue'] = isset($get_data[0])?$get_data[0]:array();
+			if($this->is_demo == '1')
+			    $data["xvalue"]["open_ai_secret_key"] = "XXXXXXXXXX";
+			$this->_viewcontroller($data);
+		}
+		else redirect('home/access_forbidden', 'location');
+        
 	}
-
 	public function open_ai_api_credentials_action()
 	{
+
 		if($this->is_demo == '1')
 		{
 		    echo "<h2 style='text-align:center;color:red;border:1px solid red; padding: 10px'>This feature is disabled in this demo.</h2>"; 
 		    exit();
 		}
-		if($this->session->userdata('user_type') != 'Admin') redirect('home/login_page', 'location');
 
 		if ($_SERVER['REQUEST_METHOD'] === 'GET') redirect('home/access_forbidden', 'location');
 
-		if ($_POST) {
+		if(ai_reply_exist()){
+			if ($_POST) {
 
-			$this->form_validation->set_rules('open_ai_secret_key','<b>'.$this->lang->line("Open Ai Secret Key").'</b>','trim');
-			$this->form_validation->set_rules('instruction_to_ai','<b>'.$this->lang->line("Instruction To AI").'</b>','trim');
+				$this->form_validation->set_rules('open_ai_secret_key','<b>'.$this->lang->line("Open Ai Secret Key").'</b>','trim');
+				$this->form_validation->set_rules('instruction_to_ai','<b>'.$this->lang->line("Instruction To AI").'</b>','trim');
+				$this->form_validation->set_rules('models','<b>'.$this->lang->line("Select Models").'</b>','trim');
+				$this->form_validation->set_rules('maximum_token','<b>'.$this->lang->line("Maximum Token").'</b>','trim');
+			}
+
+			if ($this->form_validation->run() == false) 
+			{
+			    return $this->open_ai_api_credentials();
+			} 
+			else{
+				$this->csrf_token_check();
+				$user_id=$this->session->userdata('user_id');
+				$open_ai_secret_key=strip_tags($this->input->post('open_ai_secret_key',true));
+				$instruction_to_ai=strip_tags($this->input->post('instruction_to_ai',true));
+				$models=strip_tags($this->input->post('models',true));
+				$maximum_token=strip_tags($this->input->post('maximum_token',true));
+				$update_data = array(
+					'open_ai_secret_key'=>$open_ai_secret_key,
+					'instruction_to_ai'=>$instruction_to_ai,
+					'models'=>$models,
+					'maximum_token'=>$maximum_token,
+					'user_id'=>$user_id
+				);
+				$get_data = $this->basic->get_data("open_ai_config",array("where"=>array('user_id'=>$user_id)));
+				if(!empty($get_data))
+				$this->basic->update_data("open_ai_config",array("user_id"=>$user_id),$update_data);
+				else $this->basic->insert_data("open_ai_config",$update_data);      
+				                         
+				$this->session->set_flashdata('success_message', 1);
+				redirect('integration/open_ai_api_credentials', 'location');
+			}
 		}
-
-		if ($this->form_validation->run() == false) 
-		{
-		    return $this->open_ai_api_credentials();
-		} 
-		else{
-			$this->csrf_token_check();
-			$open_ai_secret_key=strip_tags($this->input->post('open_ai_secret_key',true));
-			$instruction_to_ai=strip_tags($this->input->post('instruction_to_ai',true));
-			$update_data = array(
-				'open_ai_secret_key'=>$open_ai_secret_key,
-				'instruction_to_ai'=>$instruction_to_ai,
-			);
-
-			$get_data = $this->basic->get_data("open_ai_config");
-			if(isset($get_data[0]))
-			$this->basic->update_data("open_ai_config",array("id >"=>0),$update_data);
-			else $this->basic->insert_data("open_ai_config",$update_data);      
-			                         
-			$this->session->set_flashdata('success_message', 1);
-			redirect('integration/open_ai_api_credentials', 'location');
-		}
+		else redirect('home/access_forbidden', 'location');
+		
 	}
 
 }

@@ -1,0 +1,1 @@
+{"is_active":"bee469eb6e081674e70e036f8b0b8b78","purchase_code":"802ae142-cf1b-44e5-8f84-8c5465d98446","item_name":"ChatPion: AI Chatbot for Facebook, Instagram, eCommerce, SMS\/Email & Social Media Marketing (SaaS)","buy_at":"2020-12-15T20:20:20+11:00","licence_type":"Regular License","domain":"cp.smecube.com","checking_date":"2025-02-04"}

@@ -1572,7 +1572,7 @@ class Visual_flow_builder extends Home
                     $reply_bot[$single_reply_key]['attachment']['payload']['image_url'] = $rcn_image_file;
                     $reply_bot[$single_reply_key]['attachment']['payload']['title'] = $rcn_title;
                     $reply_bot[$single_reply_key]['attachment']['payload']['payload'] = $rcn_postback."::".$rcn_unique_id;
-                    $reply_bot[$single_reply_key]['attachment']['payload']['notification_messages_frequency'] = strtoupper($rcn_type);
+                    // $reply_bot[$single_reply_key]['attachment']['payload']['notification_messages_frequency'] = strtoupper($rcn_type);
                     $reply_bot[$single_reply_key]['attachment']['payload']['notification_messages_reoptin'] = 'ENABLED';
 
                     if($user_time_zone[0]['time_zone'] != NULL)
@@ -3015,23 +3015,6 @@ class Visual_flow_builder extends Home
         }
     }
 
-    // public function assets(){
-    //     $args = func_get_args();
-    //     $file_name = array_pop($args);
-    //     $path = FCPATH.'assets'.DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR,$args).DIRECTORY_SEPARATOR.$file_name;
-    //     $content = file_get_contents($path);
-    //     header('content-type: '.mime_content_type($path));
-    //     echo $content;
-    // }
-
-    // public function upload(){
-    //     $args = func_get_args();
-    //     $file_name = array_pop($args);
-    //     $path = FCPATH.'upload'.DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR,$args).DIRECTORY_SEPARATOR.$file_name;
-    //     $content = file_get_contents($path);
-    //     header('content-type: '.mime_content_type($path));
-    //     echo $content;
-    // }
 
     public function language_file() {
         header("Content-Type: application/javascript; charset=utf-8");

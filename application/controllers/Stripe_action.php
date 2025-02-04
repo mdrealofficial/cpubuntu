@@ -110,7 +110,7 @@ class Stripe_action extends Home
 			"stripe_card_source"=>$stripe_card_source
 		);
 
-
+		$this->check_duplicate_transaction($user_id,$transaction_id,'STRIPE');
 		$this->basic->insert_data('transaction_history', $insert_data);
 		$this->session->set_userdata("payment_success",1);
 		
@@ -333,7 +333,7 @@ class Stripe_action extends Home
 			"paid_amount"	    =>$payment_amount
 		);
 
-
+		$this->check_duplicate_transaction($user_id,$transaction_id,'Razorpay');
 		$this->basic->insert_data('transaction_history', $insert_data);
 		$this->session->set_userdata("payment_success",1);
 
@@ -513,7 +513,7 @@ class Stripe_action extends Home
 			"cycle_expired_date"=>$cycle_expired_date,
 			"paid_amount"	    =>$payment_amount
 		);
-
+		$this->check_duplicate_transaction($user_id,$transaction_id,'Paystack');
 		$this->basic->insert_data('transaction_history', $insert_data);
 		$this->session->set_userdata("payment_success",1);
 
@@ -695,7 +695,7 @@ class Stripe_action extends Home
 				"paid_amount"	    =>$payment_amount
 			);
 			
-			
+			$this->check_duplicate_transaction($user_id,$transaction_id,'Mercadopago');
 			$this->basic->insert_data('transaction_history', $insert_data);
 			$this->session->set_userdata("payment_success",1);
 
@@ -904,7 +904,7 @@ class Stripe_action extends Home
 			"paid_amount"	    =>$payment_amount
 		);
 		
-		
+		$this->check_duplicate_transaction($user_id,$transaction_id,'Mollie');
 		$this->basic->insert_data('transaction_history', $insert_data);
 		$this->session->set_userdata("payment_success",1);
 
@@ -1155,7 +1155,7 @@ class Stripe_action extends Home
 			"paid_amount"       =>$payment_amount
 		);
 
-
+		$this->check_duplicate_transaction($user_id,$transaction_id,'SSLCOMMERZ');
 		$this->basic->insert_data('transaction_history', $insert_data);
 		$this->session->set_userdata("payment_success",1);
 
@@ -1321,7 +1321,7 @@ class Stripe_action extends Home
 				"paid_amount"       =>$payment_amount
 			);
 
-
+			$this->check_duplicate_transaction($user_id,$transaction_id,'Senangpay');
 			$this->basic->insert_data('transaction_history', $insert_data);
 			$this->session->set_userdata("payment_success",1);
 
@@ -1536,7 +1536,7 @@ class Stripe_action extends Home
 				"paid_amount"       =>$payment_amount
 			);
 
-
+			$this->check_duplicate_transaction($user_id,$transaction_id,'Instamojo');
 			$this->basic->insert_data('transaction_history', $insert_data);
 			$this->session->set_userdata("payment_success",1);
 
@@ -1748,7 +1748,7 @@ class Stripe_action extends Home
 				"paid_amount"       =>$payment_amount
 			);
 
-
+			$this->check_duplicate_transaction($user_id,$transaction_id,'Toyyibpay');
 			$this->basic->insert_data('transaction_history', $insert_data);
 			$this->session->set_userdata("payment_success",1);
 
@@ -1958,7 +1958,7 @@ class Stripe_action extends Home
 				"paid_amount"       =>$payment_amount
 			);
 
-
+			$this->check_duplicate_transaction($user_id,$transaction_id,'paymaya');
 			$this->basic->insert_data('transaction_history', $insert_data);
 			$this->session->set_userdata("payment_success",1);
 
@@ -2173,8 +2173,7 @@ class Stripe_action extends Home
     			"cycle_expired_date"=>$cycle_expired_date,
     			"paid_amount"       =>$payment_amount
     		);
-
-
+			$this->check_duplicate_transaction($user_id,$transaction_id,'myfatoorah');
     		$this->basic->insert_data('transaction_history', $insert_data);
     		$this->session->set_userdata("payment_success",1);
 
@@ -2283,9 +2282,6 @@ class Stripe_action extends Home
 
     }
 
-
-
-
     public function xendit_action()
     {
     	$package_id = $this->uri->segment(3);
@@ -2391,7 +2387,7 @@ class Stripe_action extends Home
     			"paid_amount"       =>$payment_amount
     		);
 
-
+			$this->check_duplicate_transaction($user_id,$transaction_id,'xendit');
     		$this->basic->insert_data('transaction_history', $insert_data);
     		$this->session->set_userdata("payment_success",1);
 
@@ -2504,8 +2500,16 @@ class Stripe_action extends Home
     	$redirect_url=base_url()."payment/transaction_log?action=cancel";
     	redirect($redirect_url, 'refresh');
     }
-
-
-
+	public function check_duplicate_transaction($user_id='',$transaction_id='',$payment_type=''){
+		$where['where'] = array('user_id'=>$user_id,'payment_type'=>$payment_type,'transaction_id'=> $transaction_id);
+		$check_duplicate_data= $this->basic->get_data('transaction_history',$where);
+		if(count($check_duplicate_data)> 0){
+			$redirect_url=base_url()."payment/transaction_log?action=cancel";
+			redirect($redirect_url, 'refresh');
+		}
+		else{
+			return true;
+		}
+	}
 }
 

@@ -16,6 +16,20 @@
     else{
       $xvalue['instruction_to_ai'] = $this->lang->line('The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly.');
     }
+    $text_completions =[
+        'text-davinci-003',
+        'text-davinci-002',
+        'text-curie-001',
+        'text-babbage-001',
+        'text-ada-001',
+        'davinci',
+        'curie',
+        'babbage',
+        'ada'];
+
+    $chat_completions = [
+      'gpt-4','gpt-4-0314','gpt-4-32k','gpt-4-32k-0314','gpt-3.5-turbo','gpt-3.5-turbo-0301'
+    ];
 
    ?>
   <div class="section-body">
@@ -43,7 +57,37 @@
                       <span class="red"><?php echo form_error('instruction_to_ai'); ?></span>
                     </div>
                   </div>
-                </div>   
+                </div>  
+                <div class="row">
+                    <div class="col-12 col-md-12">
+                      <div class="form-group">
+                        <label for="models"><i class="fas fa-paper-plane"></i>  <?php echo $this->lang->line("Models");?></label>
+                        <select class="select2 w-100" name="models">
+                          <option value=""><?php echo $this->lang->line("Select Models"); ?></option>
+                          <optgroup label="Text Completions">
+                          <?php foreach ($text_completions as  $value): ?>
+                            <option value="<?php echo $value ?>" <?php if(isset($xvalue['models']) && $value == $xvalue['models']) echo 'selected'; ?> ><?php echo $value?></option>
+                          <?php endforeach ?>
+                          </optgroup>
+                          <optgroup label="Chat Completions">
+                          <?php foreach ($chat_completions as  $value): ?>
+                            <option value="<?php echo $value ?>" <?php if(isset($xvalue['models']) && $value == $xvalue['models']) echo 'selected'; ?> ><?php echo $value?></option>
+                          <?php endforeach ?>
+                          </optgroup>
+                        </select>
+                        <span class="red"><?php echo form_error('models'); ?></span>
+                     </div>
+                    </div>
+                </div> 
+               <div class="row">
+                  <div class="col-12 col-md-12">
+                    <div class="form-group">
+                      <label for=""><i class="fas fa-solid fa-route"></i>  <?php echo $this->lang->line("Maximum Token");?></label>
+                      <input name="maximum_token" value="<?php echo isset($xvalue['maximum_token']) ? $xvalue['maximum_token'] :"1500"; ?>" class="form-control" type="text">  
+                      <span class="red"><?php echo form_error('maximum_token'); ?></span>
+                    </div>
+                  </div>
+              </div>   
             <div class="card-footer bg-whitesmoke">
               <button class="btn btn-primary btn-lg" id="save-btn" type="submit"><i class="fas fa-save"></i> <?php echo $this->lang->line("Save");?></button>
             </div>

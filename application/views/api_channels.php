@@ -278,7 +278,6 @@
             <?php echo $this->lang->line('Open AI Is for training data of using AI.'); ?>
           </p>
         </div>
-        <?php if($user_type == 'Admin' || in_array(266,$this->module_access)) : ?>
           <div class="col-12 col-lg-2">
             <a href="<?php echo base_url('integration/open_ai_api_credentials'); ?>" class="text-dark action_tag">
               <div class="wizard-steps mb-3">
@@ -291,7 +290,6 @@
               </div>
             </a>
           </div>
-        <?php endif; ?>
       </div>
     <?php endif; ?>
 
